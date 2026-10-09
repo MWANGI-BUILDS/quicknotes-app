@@ -1,11 +1,28 @@
 const noteForm = document.querySelector("#note-form");
 const noteInput = document.querySelector("#note-input");
 const noteCategory = document.querySelector("#note-category");
+const searchInput = document.querySelector("#search-input");
 const notesList = document.querySelector("#notes-list");
 const noteCount = document.querySelector("#note-count");
 const errorMessage = document.querySelector("#error-message");
 
 let notes = [];
+const storageKey = "quicknotes-notes";
+
+try {
+  const savedNotes = JSON.parse(localStorage.getItem(storageKey) || "[]");
+  if (Array.isArray(savedNotes)) {
+    notes = savedNotes.filter((note) =>
+      note &&
+      typeof note.id === "string" &&
+      typeof note.text === "string" &&
+      typeof note.category === "string" &&
+      typeof note.createdAt === "string",
+    );
+  }
+} catch {
+  notes = [];
+}
 
 function getCategoryClass(category) {
   return `category-${category.toLowerCase()}`;
@@ -22,7 +39,20 @@ function render() {
     noteCount.textContent = `You have ${notes.length} notes.`;
   }
 
-  notes.forEach((note) => {
+  const searchTerm = searchInput.value.trim().toLocaleLowerCase();
+  const visibleNotes = notes.filter((note) =>
+    note.text.toLocaleLowerCase().includes(searchTerm),
+  );
+
+  if (searchTerm && visibleNotes.length === 0) {
+    const item = document.createElement("li");
+    item.classList.add("empty-message");
+    item.textContent = "No notes match your search.";
+    notesList.append(item);
+    return;
+  }
+
+  visibleNotes.forEach((note) => {
     const item = document.createElement("li");
     item.classList.add("note-card", getCategoryClass(note.category));
 
@@ -52,6 +82,7 @@ function render() {
     deleteButton.textContent = "Delete";
     deleteButton.addEventListener("click", () => {
       notes = notes.filter((entry) => entry.id !== note.id);
+      localStorage.setItem(storageKey, JSON.stringify(notes));
       render();
     });
 
@@ -83,9 +114,12 @@ noteForm.addEventListener("submit", (event) => {
   };
 
   notes.push(note);
+  localStorage.setItem(storageKey, JSON.stringify(notes));
   noteInput.value = "";
   errorMessage.textContent = "";
   render();
 });
+
+searchInput.addEventListener("input", render);
 
 render();
