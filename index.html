@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickNotes</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <p class="eyebrow">A little room for your thoughts</p>
+      <h1>QuickNotes</h1>
+      <p class="tagline">Catch the thought. Keep the good ones close.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" aria-labelledby="add-heading">
+      <div class="section-heading">
+        <p class="eyebrow">Make a note</p>
+        <h2 id="add-heading">Add a note</h2>
+      </div>
+      <form id="note-form">
+        <div class="field note-field">
+          <label for="note-input">What's on your mind?</label>
+          <input id="note-input" name="note" type="text" autocomplete="off" placeholder="Write something worth remembering...">
+        </div>
+        <div class="field category-field">
+          <label for="note-category">Category</label>
+          <select id="note-category" name="category">
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Study">Study</option>
+          </select>
+        </div>
+        <button class="add-button" type="submit">Add Note</button>
+      </form>
+      <p id="error-message" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section class="panel notes-panel" aria-labelledby="notes-heading">
+      <div class="notes-heading-row">
+        <div class="section-heading">
+          <p class="eyebrow">Your collection</p>
+          <h2 id="notes-heading">Your notes</h2>
+        </div>
+        <p id="note-count" aria-live="polite">You have no notes yet.</p>
+      </div>
+      <div class="field search-field">
+        <label for="search-input">Search notes</label>
+        <input id="search-input" type="search" placeholder="Find a thought...">
+      </div>
+      <ul id="notes-list" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made for the thoughts you want to keep.</p>
+  </footer>
+</body>
+</html>
